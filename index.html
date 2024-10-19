@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Grade Calculator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body class="bg-dark">
+<div class="container-md mt-5 text-white d-flex justify-content-center">
+    <div class="card bg-secondary bg-gradient shadow-lg" style="max-width: 500px;">
+        <div class="card-body">
+            <h2 class="card-title text-center mb-4">Computer Vision Assignment 2: Grade Calculator</h2>
+
+            <div class="mb-4">
+                <label for="accuracy" class="form-label">Enter Accuracy</label>
+                <div class="input-group">
+                    <input class="form-control" type="number" step="0.01" id="accuracy" min="0" max="100" placeholder="0.25" aria-label="Accuracy">
+                    <button class="btn btn-primary fw-bold" onclick="calculateGrade()">Calculate Grade</button>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label for="grade" class="form-label">Enter Grade</label>
+                <div class="input-group">
+                    <input class="form-control" type="number" id="grade" min="0" max="10" placeholder="6" aria-label="Grade">
+                    <button class="btn btn-primary fw-bold" onclick="calculateAccuracy()">Calculate Accuracy</button>
+                </div>
+            </div>
+
+            <!-- Warning messages -->
+            <div id="gradeWarning" class="alert alert-warning d-none" role="alert">
+                The grade has been capped at 10 because it exceeded the maximum allowed value.
+            </div>
+            <div id="accuracyWarning" class="alert alert-danger d-none" role="alert">
+                The calculated accuracy is below 0%.
+            </div>
+            <div id="rangeWarning" class="alert alert-danger d-none" role="alert">
+                The entered value is out of range.
+            </div>
+        </div>
+        <!-- Display the two formula's used -->
+        <div class="card-footer text-center">
+            <p>\[ \text{Grade} = \frac{40}{3} \times \text{Accuracy} + \frac{8}{3} \]</p>
+            <p>\[ \text{Accuracy} = \frac{3}{40} \times \text{Grade} - \frac{1}{5} \]</p>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+<script>
+  document.getElementById('accuracy').value = '';
+  document.getElementById('grade').value = '';
+  let calculateGrade = () => {
+    let accuracy = parseFloat(document.getElementById('accuracy').value);
+    let gradeWarningElement = document.getElementById('gradeWarning');
+    let rangeWarningElement = document.getElementById('rangeWarning');
+    let accuracyWarningElement = document.getElementById('accuracyWarning');
+
+    gradeWarningElement.classList.add('d-none');
+    rangeWarningElement.classList.add('d-none');
+    accuracyWarningElement.classList.add('d-none');
+
+    if (!isNaN(accuracy)) {
+      if (accuracy < 0 || accuracy > 100) {
+        rangeWarningElement.classList.remove('d-none');
+      } else {
+        let grade = (40 / 3) * accuracy + (8 / 3);
+        if (grade > 10) {
+          grade = 10;
+          gradeWarningElement.classList.remove('d-none');
+        }
+
+        document.getElementById('grade').value = grade.toFixed(2);
+      }
+    }
+  }
+
+  let calculateAccuracy = () => {
+    let grade = parseFloat(document.getElementById('grade').value);
+    let gradeWarningElement = document.getElementById('gradeWarning');
+    let rangeWarningElement = document.getElementById('rangeWarning');
+    let accuracyWarningElement = document.getElementById('accuracyWarning');
+
+    gradeWarningElement.classList.add('d-none');
+    rangeWarningElement.classList.add('d-none');
+    accuracyWarningElement.classList.add('d-none');
+
+    if (!isNaN(grade)) {
+      if (grade < 0 || grade > 10) {
+        rangeWarningElement.classList.remove('d-none');
+      } else {
+        let accuracy = (3 / 40) * grade - (1 / 5);
+        if (accuracy < 0) {
+          accuracyWarningElement.classList.remove('d-none');
+        }
+
+        document.getElementById('accuracy').value = accuracy.toFixed(2);
+      }
+    }
+  }
+</script>
+</body>
+</html>
